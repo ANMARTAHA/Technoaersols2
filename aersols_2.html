@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Smart — Aerosols &amp; Foams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2430;
+    --paper:#EFEBDD;
+    --panel:#F8F6EE;
+    --navy:#1C3144;
+    --steel:#3E6E8E;
+    --amber:#C97C2C;
+    --sage:#6F8763;
+    --line:#D3CDB8;
+    --danger:#B5482F;
+    --good:#4C7A4B;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Source Serif 4', serif;
+    margin:0;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  /* ===== Header ===== */
+  header.top{
+    background:var(--navy);
+    color:var(--paper);
+    padding:34px 28px 26px;
+    border-bottom:6px solid var(--amber);
+  }
+  .top-inner{max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;}
+  .brand h1{font-size:2.4rem;color:#fff;}
+  .brand p{margin:6px 0 0;color:#C7D2DC;font-size:0.98rem;max-width:520px;}
+  .top-tag{font-family:'IBM Plex Mono', monospace;font-size:0.72rem;color:var(--amber);letter-spacing:0.04em;}
+
+  /* ===== Nav ===== */
+  nav.tabs{
+    background:var(--panel);
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:50;
+  }
+  .tabs-inner{max-width:1080px;margin:0 auto;display:flex;gap:6px;padding:10px 28px;flex-wrap:wrap;}
+  .tab-btn{
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:0.92rem;
+    font-weight:600;
+    color:var(--navy);
+    background:transparent;
+    border:1.5px solid var(--line);
+    border-radius:999px;
+    padding:9px 18px;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .tab-btn:hover{border-color:var(--steel);}
+  .tab-btn.active{
+    background:var(--navy);
+    border-color:var(--navy);
+    color:#fff;
+  }
+  .tab-btn .dot{
+    display:inline-block;width:7px;height:7px;border-radius:50%;
+    background:var(--amber);margin-right:8px;
+  }
+
+  main{max-width:1080px;margin:0 auto;padding:30px 28px 80px;}
+  section.view{display:none;}
+  section.view.active{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .section-head{margin-bottom:22px;border-bottom:2px solid var(--ink);padding-bottom:10px;}
+  .section-head h2{font-size:1.7rem;}
+  .section-head p{margin:6px 0 0;color:#5B5646;font-size:0.95rem;}
+
+  /* ===== Overview ===== */
+  .overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;}
+  .law-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:4px solid var(--steel);
+    border-radius:var(--radius);
+    padding:14px 16px;
+  }
+  .law-card h4{font-size:0.98rem;color:var(--navy);margin-bottom:6px;}
+  .law-card p{margin:0;font-size:0.87rem;color:#3B3728;}
+  .law-card.amber{border-left-color:var(--amber);}
+  .law-card.sage{border-left-color:var(--sage);}
+  .law-card .num{font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--amber);display:block;margin-bottom:4px;}
+
+  /* ===== Diagrams ===== */
+  .diagram-subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .sub-btn{
+    font-size:0.82rem;font-weight:600;padding:7px 14px;border-radius:3px;
+    border:1px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer;
+  }
+  .sub-btn.active{background:var(--amber);border-color:var(--amber);color:#fff;}
+
+  /* ===== Level tabs (Flashcards / Quiz difficulty) ===== */
+  .level-subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .level-btn{
+    font-size:0.82rem;font-weight:700;padding:8px 16px;border-radius:3px;
+    border:1.5px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer;
+  }
+  .level-btn.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .level-btn[data-difficulty="2"].active{background:var(--steel);border-color:var(--steel);}
+  .level-btn[data-difficulty="3"].active{background:var(--danger);border-color:var(--danger);}
+  .diagram-pane{display:none;}
+  .diagram-pane.active{display:block;}
+  .diagram-box{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start;
+  }
+  @media(max-width:720px){.diagram-box{grid-template-columns:1fr;}}
+  .diagram-box svg{width:100%;height:auto;}
+  .hotspot{cursor:pointer;}
+  .hotspot circle{fill:var(--amber);stroke:var(--navy);stroke-width:2;transition:fill .15s;}
+  .hotspot:hover circle, .hotspot.active circle{fill:var(--steel);}
+  .hotspot text{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:#fff;font-weight:600;text-anchor:middle;dominant-baseline:middle;pointer-events:none;}
+  .info-panel{background:#fff;border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:var(--radius);padding:16px;min-height:150px;}
+  .info-panel h4{color:var(--navy);margin-bottom:8px;}
+  .info-panel p{margin:0;font-size:0.9rem;color:#3B3728;}
+  .placeholder-txt{color:#8B8672;font-style:italic;font-size:0.87rem;}
+
+  .toggle-row{display:flex;gap:8px;margin-bottom:16px;}
+  .toggle-btn{
+    flex:1;padding:12px;border-radius:3px;border:1.5px solid var(--navy);background:#fff;
+    color:var(--navy);font-weight:700;cursor:pointer;font-size:0.9rem;
+  }
+  .toggle-btn.active{background:var(--navy);color:#fff;}
+  .state-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;}
+  .state-box h4{color:var(--amber);margin-bottom:10px;}
+  .state-box ul{margin:0;padding-left:18px;font-size:0.9rem;}
+  .state-box li{margin-bottom:6px;}
+
+  table.cmp{width:100%;border-collapse:collapse;font-size:0.88rem;}
+  table.cmp th{background:var(--navy);color:#fff;text-align:left;padding:9px 10px;font-weight:600;}
+  table.cmp td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  table.cmp tr:nth-child(even){background:#F3EFE0;}
+
+  /* ===== Mini Map ===== */
+  .map-wrap{display:grid;grid-template-columns:1.15fr 1fr;gap:20px;}
+  @media(max-width:760px){.map-wrap{grid-template-columns:1fr;}}
+  .map-nodes{display:flex;flex-direction:column;gap:8px;}
+  .map-node{
+    text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:3px;
+    padding:11px 14px;font-weight:600;font-size:0.88rem;color:var(--navy);cursor:pointer;
+    position:relative;padding-left:30px;
+  }
+  .map-node::before{
+    content:"";position:absolute;left:12px;top:50%;transform:translateY(-50%);
+    width:8px;height:8px;border-radius:50%;background:var(--steel);
+  }
+  .map-node.active{border-color:var(--amber);background:#fff;}
+  .map-node.active::before{background:var(--amber);}
+  .map-detail{
+    position:sticky;top:70px;background:#fff;border:1px solid var(--line);
+    border-left:5px solid var(--navy);border-radius:3px;padding:20px;min-height:260px;
+  }
+  .map-detail h3{color:var(--navy);margin-bottom:10px;font-size:1.15rem;}
+  .map-detail p{margin:0;font-size:0.92rem;color:#3B3728;}
+
+  /* ===== Flashcards ===== */
+  .fc-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+  .fc-count{font-family:'IBM Plex Mono',monospace;font-size:0.8rem;color:var(--steel);}
+  .fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;}
+  .fc-card{
+    perspective:1000px;height:190px;cursor:pointer;overflow:hidden;border-radius:4px;
+  }
+  .fc-inner{
+    position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;
+  }
+  .fc-card.flipped .fc-inner{transform:rotateY(180deg);}
+  .fc-face{
+    position:absolute;inset:0;backface-visibility:hidden;border-radius:4px;
+    padding:14px;display:flex;align-items:center;justify-content:center;text-align:center;
+    font-size:0.86rem;border:1px solid var(--line);
+    overflow:hidden auto;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;
+    max-width:100%;box-sizing:border-box;hyphens:auto;
+  }
+  .fc-face::-webkit-scrollbar{width:5px;}
+  .fc-face::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.2);border-radius:3px;}
+  .fc-front{background:var(--navy);color:#fff;}
+  .fc-back{background:#fff;color:var(--ink);transform:rotateY(180deg);border-color:var(--amber);border-width:2px;}
+  .fc-tag{position:absolute;top:6px;left:8px;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;opacity:0.7;}
+
+  /* ===== Quiz ===== */
+  .quiz-score{
+    position:sticky;top:60px;z-index:10;background:var(--navy);color:#fff;
+    padding:10px 16px;border-radius:4px;margin-bottom:18px;display:flex;justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;font-size:0.85rem;align-items:center;flex-wrap:wrap;gap:8px;
+  }
+  .quiz-score button{
+    background:var(--amber);border:none;color:#fff;padding:6px 12px;border-radius:3px;
+    font-family:'IBM Plex Sans',sans-serif;font-weight:600;cursor:pointer;font-size:0.8rem;
+  }
+  .q-item{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:16px 18px;margin-bottom:12px;}
+  .q-item h4{font-size:0.94rem;margin-bottom:10px;color:var(--navy);}
+  .q-item .qn{font-family:'IBM Plex Mono',monospace;color:var(--amber);margin-right:6px;}
+  .opt{
+    display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);
+    border-radius:3px;padding:9px 12px;margin-bottom:7px;cursor:pointer;font-size:0.86rem;color:var(--ink);
+  }
+  .opt:hover{border-color:var(--steel);}
+  .opt.correct{background:#E6F0E4;border-color:var(--good);color:var(--good);font-weight:600;}
+  .opt.wrong{background:#F5E4DE;border-color:var(--danger);color:var(--danger);font-weight:600;}
+  .opt[disabled]{cursor:default;}
+
+  footer.foot{
+    background:var(--navy);color:#C7D2DC;text-align:center;padding:22px;font-size:0.8rem;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  footer.foot span{color:var(--amber);}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="top-tag">PHARMACEUTICAL TECHNOLOGY I</span>
+      <h1>Study Smart</h1>
+      <p>Aerosols &amp; Foams, Part 2 — valve assemblies, inhalers, filling operations, and foam systems, organized for review.</p>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-view="overview"><span class="dot"></span>Overview</button>
+    <button class="tab-btn" data-view="diagrams"><span class="dot"></span>Interactive Diagrams</button>
+    <button class="tab-btn" data-view="minimap"><span class="dot"></span>Mini Map</button>
+    <button class="tab-btn" data-view="flashcards"><span class="dot"></span>Flash Cards</button>
+    <button class="tab-btn" data-view="quiz"><span class="dot"></span>Quiz Bank</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section class="view active" id="overview">
+    <div class="section-head">
+      <h2>Overview</h2>
+      <p>The core rules and facts — no lecture, just what you need to lock in.</p>
+    </div>
+    <div class="overview-grid">
+      <div class="law-card"><span class="num">01</span><h4>Valve purpose</h4><p>Expel the contents in the desired form, at the desired rate, and — for metered valves — in the correct dose.</p></div>
+      <div class="law-card"><span class="num">02</span><h4>Material rule</h4><p>All valve materials must be inert to the formulation and FDA-approved. Common materials: plastic, rubber, aluminum, stainless steel.</p></div>
+      <div class="law-card amber"><span class="num">03</span><h4>Orifice rule</h4><p>Larger orifices + less propellant → foams &amp; solid streams. Smaller orifices + more propellant → sprays &amp; mists.</p></div>
+      <div class="law-card"><span class="num">04</span><h4>MDI metering</h4><p>A dual-valve mechanism alternates the metering chamber between "fill from container" and "release to atmosphere."</p></div>
+      <div class="law-card sage"><span class="num">05</span><h4>Cold filling</h4><p>Concentrate + propellant cooled to <span class="mono">-34.5°C to -40°C</span>. Cannot be used for aqueous systems — water freezes.</p></div>
+      <div class="law-card sage"><span class="num">06</span><h4>Pressure filling</h4><p>Used for most pharmaceutical aerosols. Two advantages: less moisture contamination, less propellant lost.</p></div>
+      <div class="law-card"><span class="num">07</span><h4>Discharge rate</h4><p>Grams discharged per unit time, found by weighing a filled aerosol before and after a timed discharge.</p></div>
+      <div class="law-card amber"><span class="num">08</span><h4>Storage rule</h4><p>Store between <span class="mono">15°C and 30°C</span>. Cold canisters give a weaker-than-normal spray.</p></div>
+      <div class="law-card"><span class="num">09</span><h4>Label warnings</h4><p>Never puncture, never store near heat/flame, never incinerate.</p></div>
+      <div class="law-card"><span class="num">10</span><h4>Spacers</h4><p>Placed between mouthpiece and mouth; separate actuation from inhalation by 3–5 seconds; cut oropharyngeal deposition.</p></div>
+      <div class="law-card sage"><span class="num">11</span><h4>DPI vs pMDI</h4><p>DPIs are propellant-free and breath-actuated, but depend on the patient's own inhalation strength and are humidity-sensitive.</p></div>
+      <div class="law-card amber"><span class="num">12</span><h4>Foam phase rule</h4><p>Propellant in the internal phase → stable foam. Propellant in the external phase → spray or quick-breaking foam.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ DIAGRAMS ============ -->
+  <section class="view" id="diagrams">
+    <div class="section-head">
+      <h2>Interactive Diagrams</h2>
+      <p>Click, toggle, and compare — every figure below responds.</p>
+    </div>
+
+    <div class="diagram-subnav">
+      <button class="sub-btn active" data-pane="d-valve">Valve Assembly</button>
+      <button class="sub-btn" data-pane="d-mdi">MDI Mechanism</button>
+      <button class="sub-btn" data-pane="d-fill">Filling Methods</button>
+      <button class="sub-btn" data-pane="d-dpi">DPI Pros / Cons</button>
+      <button class="sub-btn" data-pane="d-foam">Foam Phase</button>
+    </div>
+
+    <!-- Valve diagram -->
+    <div class="diagram-pane active" id="d-valve">
+      <div class="diagram-box">
+        <svg viewBox="0 0 340 380" xmlns="http://www.w3.org/2000/svg">
+          <path d="M90 130 C90 90 110 70 150 70 L190 70 C230 70 250 90 250 130 L250 340 L90 340 Z" fill="#fff" stroke="#1C3144" stroke-width="2"/>
+          <line x1="90" y1="180" x2="70" y2="170" stroke="#3E6E8E" stroke-width="1.5"/>
+          <line x1="250" y1="180" x2="270" y2="170" stroke="#3E6E8E" stroke-width="1.5"/>
+          <rect x="150" y="30" width="40" height="18" fill="#fff" stroke="#1C3144" stroke-width="2"/>
+          <g class="hotspot" data-part="actuator"><circle cx="170" cy="30" r="13"/><text x="170" y="31">1</text></g>
+          <line x1="165" y1="48" x2="165" y2="70" stroke="#1C3144" stroke-width="3"/>
+          <g class="hotspot" data-part="stem"><circle cx="165" cy="58" r="13"/><text x="165" y="59">2</text></g>
+          <g class="hotspot" data-part="mountingcup"><circle cx="215" cy="80" r="13"/><text x="215" y="81">5</text></g>
+          <g class="hotspot" data-part="gasket"><circle cx="150" cy="90" r="13"/><text x="150" y="91">3</text></g>
+          <g class="hotspot" data-part="spring"><circle cx="150" cy="115" r="13"/><text x="150" y="116">4</text></g>
+          <g class="hotspot" data-part="housing"><circle cx="190" cy="110" r="13"/><text x="190" y="111">6</text></g>
+          <path d="M170 130 C160 160 165 240 175 300" fill="none" stroke="#C97C2C" stroke-width="4"/>
+          <g class="hotspot" data-part="diptube"><circle cx="175" cy="230" r="13"/><text x="175" y="231">7</text></g>
+        </svg>
+        <div class="info-panel" id="valve-panel">
+          <h4>Tap a numbered part</h4>
+          <p class="placeholder-txt">Select any circle on the diagram to see what that part does.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MDI diagram -->
+    <div class="diagram-pane" id="d-mdi">
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-mdi="closed">Valve Closed (resting)</button>
+        <button class="toggle-btn" data-mdi="open">Valve Actuated (pressed)</button>
+      </div>
+      <div class="state-box" id="mdi-box">
+        <h4>Valve Closed — resting position</h4>
+        <ul>
+          <li>The metering chamber is <strong>sealed from the atmosphere</strong>.</li>
+          <li>It stays <strong>open to the container</strong>, so it fills with drug suspension/solution and propellant.</li>
+          <li>This is the state the inhaler sits in between doses.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Filling methods -->
+    <div class="diagram-pane" id="d-fill">
+      <table class="cmp">
+        <tr><th>Step</th><th>Cold Filling</th><th>Pressure Filling</th></tr>
+        <tr><td>Temperature</td><td>Concentrate &amp; propellant cooled to -34.5°C to -40°C</td><td>Performed near room temperature</td></tr>
+        <tr><td>Sequence</td><td>Chilled concentrate metered into a cold container, then liquefied gas is added</td><td>Concentrate placed in container → valve inserted &amp; crimped → liquefied gas metered in under pressure via valve stem</td></tr>
+        <tr><td>How it stops</td><td>Fixed volume of liquefied gas added</td><td>Propellant stops entering once container pressure equals burette pressure</td></tr>
+        <tr><td>Air handling</td><td>Cold, heavy propellant vapor displaces the air</td><td>Valve is crimped before gas entry</td></tr>
+        <tr><td>Aqueous systems</td><td>Not possible — water freezes</td><td>Possible</td></tr>
+        <tr><td>Advantages</td><td>—</td><td>Less moisture contamination; less propellant lost</td></tr>
+        <tr><td>Common use</td><td>Less common</td><td>Used for most pharmaceutical aerosols</td></tr>
+      </table>
+    </div>
+
+    <!-- DPI pros/cons -->
+    <div class="diagram-pane" id="d-dpi">
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-dpi="adv">Advantages</button>
+        <button class="toggle-btn" data-dpi="dis">Disadvantages</button>
+      </div>
+      <div class="state-box" id="dpi-box">
+        <h4>Advantages of DPIs over pMDIs</h4>
+        <ul>
+          <li>Propellant-free; usually no excipient besides a lactose carrier.</li>
+          <li>Breath-actuated — no need to coordinate actuation with inhalation.</li>
+          <li>Can deliver larger drug doses than pressurized MDIs.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Foam phase -->
+    <div class="diagram-pane" id="d-foam">
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-foam="internal">Propellant: Internal Phase</button>
+        <button class="toggle-btn" data-foam="external">Propellant: External Phase</button>
+      </div>
+      <div class="state-box" id="foam-box">
+        <h4>Result: Stable Foam</h4>
+        <ul>
+          <li>Propellant sits in the internal (discontinuous) phase.</li>
+          <li>The product discharges as a stable foam that holds its structure.</li>
+          <li>Surfactants keep the gas dispersed within the liquid phase.</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============ MINI MAP ============ -->
+  <section class="view" id="minimap">
+    <div class="section-head">
+      <h2>Mini Map</h2>
+      <p>Pick a title on the left — its details load into the panel on the right.</p>
+    </div>
+    <div class="map-wrap">
+      <div class="map-nodes" id="map-nodes"></div>
+      <div class="map-detail" id="map-detail">
+        <h3>Choose a topic</h3>
+        <p class="placeholder-txt">Click any title on the left to load its details here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FLASHCARDS ============ -->
+  <section class="view" id="flashcards">
+    <div class="section-head">
+      <h2>Flash Cards</h2>
+      <p>Click a card to flip it. Pick a difficulty level below.</p>
+    </div>
+    <div class="level-subnav" id="fc-level-nav">
+      <button class="level-btn active" data-difficulty="1">Level 1 · Easy (60)</button>
+      <button class="level-btn" data-difficulty="2">Level 2 · Medium (50)</button>
+      <button class="level-btn" data-difficulty="3">Level 3 · Hard (40)</button>
+    </div>
+    <div class="fc-toolbar">
+      <span class="fc-count" id="fc-count"></span>
+      <span class="fc-count">click a card to reveal the answer</span>
+    </div>
+    <div class="fc-grid" id="fc-grid"></div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="view" id="quiz">
+    <div class="section-head">
+      <h2>Quiz Bank</h2>
+      <p>Answer choices are shuffled — the correct one moves each time you reset. Pick a difficulty level below.</p>
+    </div>
+    <div class="level-subnav" id="quiz-level-nav">
+      <button class="level-btn active" data-difficulty="1">Level 1 · Easy (60)</button>
+      <button class="level-btn" data-difficulty="2">Level 2 · Medium (50)</button>
+      <button class="level-btn" data-difficulty="3">Level 3 · Hard (40)</button>
+    </div>
+    <div class="quiz-score">
+      <span id="quiz-score-text">Score: 0 / 0</span>
+      <button id="quiz-reset">Reset &amp; Reshuffle</button>
+    </div>
+    <div id="quiz-list"></div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  © <span>Anmar Taha</span> — Study Smart · Pharmaceutical Technology I · Aerosols &amp; Foams
+</footer>
+
+<script>
+/* ============ TAB SWITCHING ============ */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.view).classList.add('active');
+  });
+});
+
+/* ============ DIAGRAM SUB-TABS ============ */
+document.querySelectorAll('.sub-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.diagram-pane').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.pane).classList.add('active');
+  });
+});
+
+/* ============ VALVE HOTSPOTS ============ */
+const valveData = {
+  actuator: ["Actuator", "The button the user presses. Its inner-chamber design and emission-orifice size set the discharged form: mist, coarse spray, solid stream, or foam."],
+  stem: ["Stem", "Supports the actuator and delivers the formulation, in the proper form, to the actuator's chamber."],
+  gasket: ["Gasket", "Sits snugly against the stem and prevents leakage of the formulation whenever the valve is closed."],
+  spring: ["Spring", "Holds the gasket in place and pulls the actuator back to the closed position once pressure is released."],
+  mountingcup: ["Mounting Cup", "Attached to the can and holds the valve assembly in place. Its underside touches the formulation, so it must meet the same compatibility rules as the container interior — sometimes coated with epoxy resin or vinyl."],
+  housing: ["Housing", "Sits directly below the mounting cup and links the dip tube with the stem and actuator. Its orifice, together with the stem, helps set delivery rate and emitted form."],
+  diptube: ["Dip Tube", "Extends from the housing down into the product and carries the formulation up to the valve. Product viscosity and desired delivery rate set its inner dimensions."]
+};
+document.querySelectorAll('#d-valve .hotspot').forEach(h=>{
+  h.addEventListener('click',()=>{
+    document.querySelectorAll('#d-valve .hotspot').forEach(x=>x.classList.remove('active'));
+    h.classList.add('active');
+    const [title,text] = valveData[h.dataset.part];
+    document.getElementById('valve-panel').innerHTML = '<h4>'+title+'</h4><p>'+text+'</p>';
+  });
+});
+
+/* ============ MDI TOGGLE ============ */
+const mdiStates = {
+  closed: ["Valve Closed — resting position", [
+    "The metering chamber is sealed from the atmosphere.",
+    "It stays open to the container, so it fills with drug suspension or solution in propellant.",
+    "This is the state the inhaler sits in between doses."
+  ]],
+  open: ["Valve Actuated — pressed", [
+    "Depressing the actuator reverses both seals at once.",
+    "The chamber opens to the atmosphere and releases its measured dose.",
+    "At the same moment, it seals off from the container's contents so the dose stays fixed.",
+    "Releasing the actuator restores the system for the next dose."
+  ]]
+};
+document.querySelectorAll('[data-mdi]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-mdi]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const [title,lines] = mdiStates[btn.dataset.mdi];
+    document.getElementById('mdi-box').innerHTML = '<h4>'+title+'</h4><ul>'+lines.map(l=>'<li>'+l+'</li>').join('')+'</ul>';
+  });
+});
+
+/* ============ DPI TOGGLE ============ */
+const dpiStates = {
+  adv: ["Advantages of DPIs over pMDIs", [
+    "Propellant-free; usually no excipient besides a lactose carrier.",
+    "Breath-actuated — no need to coordinate actuation with inhalation.",
+    "Can deliver larger drug doses than pressurized MDIs."
+  ]],
+  dis: ["Disadvantages of DPIs", [
+    "Powder liberation and deaggregation depend on the patient's inhalation strength, which respiratory disease can impair.",
+    "Exposed to ambient atmospheric conditions, which can reduce formulation stability.",
+    "Elevated humidity, for instance, can cause the powder to aggregate."
+  ]]
+};
+document.querySelectorAll('[data-dpi]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-dpi]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const [title,lines] = dpiStates[btn.dataset.dpi];
+    document.getElementById('dpi-box').innerHTML = '<h4>'+title+'</h4><ul>'+lines.map(l=>'<li>'+l+'</li>').join('')+'</ul>';
+  });
+});
+
+/* ============ FOAM TOGGLE ============ */
+const foamStates = {
+  internal: ["Result: Stable Foam", [
+    "Propellant sits in the internal (discontinuous) phase.",
+    "The product discharges as a stable foam that holds its structure.",
+    "Surfactants keep the gas dispersed within the liquid phase."
+  ]],
+  external: ["Result: Spray or Quick-Breaking Foam", [
+    "Propellant sits in the external (continuous) phase.",
+    "The product discharges as a spray, or as a foam that breaks down quickly.",
+    "Quick-breaking foams made with alcohol give a cooling sensation and may have disinfectant properties."
+  ]]
+};
+document.querySelectorAll('[data-foam]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-foam]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const [title,lines] = foamStates[btn.dataset.foam];
+    document.getElementById('foam-box').innerHTML = '<h4>'+title+'</h4><ul>'+lines.map(l=>'<li>'+l+'</li>').join('')+'</ul>';
+  });
+});
+
+/* ============ MINI MAP ============ */
+const mapTopics = [
+  ["Valve function &amp; materials","The valve assembly expels contents in the desired form, rate, and — for metered valves — dose. All materials must be inert to the formulation and FDA-approved; common choices are plastic, rubber, aluminum, and stainless steel."],
+  ["Actuator &amp; orifice design","The actuator's inner chamber and orifice size set the discharged form. Larger orifices with less propellant are used for foams and solid streams; smaller orifices with more propellant suit sprays and mists."],
+  ["Stem, gasket &amp; spring","The stem delivers formulation to the actuator chamber. The gasket seals against leakage when closed. The spring holds the gasket in place and returns the actuator to the closed position."],
+  ["Mounting cup &amp; housing","The mounting cup attaches the valve to the can and must meet the same compatibility standards as the container, sometimes needing an epoxy or vinyl coating. The housing, just below it, links the dip tube to the stem and actuator."],
+  ["Dip tube","The dip tube runs from the housing into the product and carries formulation up to the valve. Its inner dimensions are set by the product's viscosity and intended delivery rate."],
+  ["MDI metering mechanism","A dual-valve mechanism controls the metering chamber. Closed, it is sealed from the atmosphere but open to the container and fills with product. Pressed, it seals from the container and opens to the atmosphere, releasing a fixed dose."],
+  ["Cold filling","Concentrate and propellant are both cooled to -34.5°C to -40°C to liquefy the gas. Chilled concentrate is metered into a cold container, then liquefied gas is added; cold, heavy propellant vapor displaces the air. Aqueous systems cannot use this method, since the water would freeze."],
+  ["Pressure filling","Concentrate is placed in the container, the valve is inserted and crimped, then liquefied gas is metered in under pressure through the valve stem from a pressure burette, stopping once pressures equalize. It is used for most pharmaceutical aerosols and causes less moisture contamination and less propellant loss than cold filling."],
+  ["Testing filled containers","Filled containers are checked under various conditions for leaks or weakness. Valve discharge rate is found by weighing a filled aerosol before and after a timed discharge. Spray pattern, particle size distribution, and dose reproducibility may also be tested."],
+  ["Packaging, labeling &amp; storage","A protective cap keeps dust and dirt off the valve. Labels must warn against puncturing, storing near heat or flame, and incineration, plus instructions on shaking and holding angle/distance. Storage is generally 15°C to 30°C; cold canisters give a weaker spray."],
+  ["Extenders / spacers","Spacers were built for patients who could not coordinate actuation with inhalation. Placed between mouthpiece and mouth, they let actuation and inhalation be separated by 3 to 5 seconds, giving propellant time to evaporate — which reduces droplet size, velocity, and oropharyngeal deposition."],
+  ["Dry powder inhalers (DPI)","Drug is inhaled as a cloud of fine particles, either preloaded in the device or filled into hard gelatin or hypromellose capsules. DPIs are propellant-free and breath-actuated with larger achievable doses, but depend on the patient's inhalation strength and are sensitive to ambient humidity, which can cause powder aggregation."],
+  ["Foams &amp; their preparation","Medicated foams are emulsions of gas bubbles dispersed in a liquid phase carrying the API, formed at the moment of application with the help of surfactants. Foams for open wounds or badly injured skin must be sterile. Propellant in the internal phase gives a stable foam; propellant in the external phase gives a spray or quick-breaking foam, which — if alcohol-based — can also feel cooling and act as a disinfectant."]
+];
+const mapNodesEl = document.getElementById('map-nodes');
+const mapDetailEl = document.getElementById('map-detail');
+mapTopics.forEach((t,i)=>{
+  const b = document.createElement('button');
+  b.className='map-node';
+  b.innerHTML = t[0];
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.map-node').forEach(n=>n.classList.remove('active'));
+    b.classList.add('active');
+    mapDetailEl.innerHTML = '<h3>'+t[0]+'</h3><p>'+t[1]+'</p>';
+  });
+  mapNodesEl.appendChild(b);
+});
+
+/* ============ FLASHCARDS ============ */
+const flashcardsL1 = [
+["What is the primary function of the aerosol valve assembly?","To permit expulsion of the contents in the desired form, at the desired rate, and — for metered valves — in the proper dose."],
+["What two requirements must aerosol valve materials meet?","They must be inert to the formulation and approved by the FDA."],
+["Name four materials commonly used in the manufacture of valve parts.","Plastic, rubber, aluminum, and stainless steel."],
+["List the seven parts of a standard aerosol valve assembly.","Actuator, stem, gasket, spring, mounting cup, housing, and dip tube."],
+["What is the actuator?","The button the user presses to activate the valve assembly for emission of the product."],
+["Name the four physical forms in which an aerosol product can be discharged.","Mist, coarse spray, solid stream, or foam."],
+["What controls the physical form of the discharged aerosol product?","The design of the actuator's inner chamber and the size of its emission orifice."],
+["What orifice size and propellant amount are used for foams and solid streams?","Larger orifices and less propellant."],
+["What is the function of the stem?","It supports the actuator and delivers the formulation, in the proper form, to the actuator's chamber."],
+["What is the function of the gasket?","It sits snugly with the stem and prevents leakage of the formulation when the valve is closed."],
+["What is the function of the spring?","It holds the gasket in place and returns the actuator to the closed position once pressure is released."],
+["What is the mounting cup?","The part attached to the aerosol can or container that holds the valve in place."],
+["Why must the mounting cup's underside meet the same compatibility criteria as the container interior?","Because it is exposed to the formulation."],
+["What materials may coat a mounting cup if needed?","An inert material such as epoxy resin or vinyl."],
+["Where is the housing located?","Directly below the mounting cup."],
+["What does the housing link together?","The dip tube and the stem and actuator."],
+["What is the function of the dip tube?","It extends from the housing down into the product and brings the formulation from the container to the valve."],
+["What two factors dictate the inner dimensions of the dip tube and housing?","The viscosity of the product and its intended delivery rate."],
+["In metered-dose valve systems, what regulates the amount of material discharged?","An auxiliary valve (metering) chamber, by virtue of its capacity or dimensions."],
+["What controls the integrity of the metering chamber in an MDI?","A dual valve mechanism."],
+["When the MDI actuator valve is closed, what state is the metering chamber in?","Sealed from the atmosphere, but open to and filling with the contents of the container."],
+["What happens when the MDI actuator is depressed?","The chamber becomes open to the atmosphere, releasing its contents, while sealing from the container's contents."],
+["What happens when the MDI actuator is released?","The system is restored, ready for the next dose."],
+["In cold filling, to what temperature range are the concentrate and propellant cooled?","-34.5°C to -40°C."],
+["Why must the propellant be cooled in cold filling?","To liquefy the propellant gas."],
+["In cold filling, what is added after the chilled concentrate is metered into the cold container?","The liquefied gas."],
+["What displaces the air in the container during cold filling?","The heavy vapors of the cold liquid propellant."],
+["Why can't aqueous systems be filled by the cold filling process?","Because the low temperatures required would turn the water to ice."],
+["In pressure filling, where is the product concentrate first placed?","Quantitatively into the aerosol container."],
+["In pressure filling, what happens after the product concentrate is placed in the container?","The valve assembly is inserted and crimped into place."],
+["In pressure filling, from where is the liquefied gas metered into the valve stem?","A pressure burette."],
+["What stops the flow of propellant during pressure filling?","When the pressure in the container equals the pressure in the burette."],
+["Which filling method is used for most pharmaceutical aerosols?","Pressure filling."],
+["What are the two advantages of pressure filling over cold filling?","Less danger of moisture contamination, and less propellant lost in the process."],
+["After filling, what are aerosol containers tested for regarding leaks?","Leaks or weakness in the valve assembly or container, under various environmental conditions."],
+["How is the valve discharge rate determined?","By discharging a portion of the contents of a previously weighed aerosol over a period and calculating the grams discharged per unit of time from the weight difference."],
+["Besides discharge rate, what else may aerosols be tested for?","Spray patterns, particle size distribution of the spray, and accuracy/reproducibility of dosage for metered valves."],
+["What does the protective cap on most aerosol products protect against?","Contamination of the valve with dust and dirt."],
+["What three warnings must aerosol labels carry for safety?","Not to puncture pressurized containers, not to use or store them near heat or an open flame, and not to incinerate them."],
+["What is the generally recommended storage temperature range for aerosol products?","15°C to 30°C."],
+["What happens to the spray from an aerosol canister when it is cold?","Less than the usual spray may result."],
+["What two instructions commonly appear on pharmaceutical aerosol labels regarding use?","Shaking before use, and holding at the proper angle and/or distance from the target."],
+["What problem were extender devices (spacers) originally developed to solve?","For patients who could not learn to coordinate release of the medication with inhalation."],
+["Where is an extender device placed?","Between the MDI's mouthpiece and the patient's mouth."],
+["By how many seconds can an extender device separate activation of the aerosol from inhalation?","Up to 3 to 5 seconds."],
+["What effect does an extender device have on aerosol velocity and droplet size?","It reduces aerosol velocity and decreases droplet size."],
+["Why does an extender device decrease droplet size?","Because there is time for evaporation of the fluorohydrocarbon propellant."],
+["What benefit results from the reduced droplet size caused by an extender device?","Less deposition of medication in the oropharynx."],
+["In dry powder inhaler (DPI) systems, how is the drug inhaled?","As a cloud of fine particles."],
+["How is the drug loaded in a DPI system?","Either preloaded in an inhalation device, or filled into hard gelatin or hypromellose capsules loaded into a device prior to use."],
+["What is a key formulation advantage of DPIs?","DPI formulations are propellant-free and usually do not contain any excipient other than a carrier."],
+["What is the usual carrier used in DPI formulations?","Lactose."],
+["Why are DPIs described as \"breath-actuated\"?","Because this avoids the problems of inhalation-actuation coordination encountered with pMDIs."],
+["Compared with pMDIs, what dosing advantage do DPIs have?","DPIs can deliver larger drug doses than pMDIs."],
+["What limits the liberation and deaggregation of powder from a DPI device?","The patient's ability to inhale, which may be impaired in respiratory disease."],
+["Why can elevated humidity be a problem for DPIs?","Because DPIs are exposed to ambient atmospheric conditions, and elevated humidity may cause the powders to aggregate."],
+["What is a medicated foam, structurally?","An emulsion containing a dispersed phase of gas bubbles in a liquid continuous phase containing the API."],
+["When is a medicated foam actually formed?","At the time of application."],
+["What is the role of surfactants in a medicated foam?","To ensure the dispersion of the gas and the two phases."],
+["What requirement applies to medicated foams intended to treat severely injured skin or open wounds?","They must be sterile."]
+];
+
+const flashcardsL2 = [
+["Explain how the actuator's design and the propellant type/quantity together determine the particle size of the emitted product.","The type and quantity of propellant, combined with the actuator's design and dimensions, jointly control the particle size of the emitted product; larger orifices with less propellant yield foams/solid streams, while smaller orifices with more propellant yield fine sprays/mists."],
+["Compare the roles of the gasket and the spring in the valve's closed position.","The gasket seals the valve to prevent leakage while it is closed, while the spring holds the gasket in place and is the mechanism that returns (retracts) the actuator to that closed position after use."],
+["Why must the mounting cup receive the same compatibility consideration as the container's interior?","Because its underside is directly exposed to the formulation, so an incompatible mounting cup could interact with the product just as an incompatible container wall could."],
+["Trace the path of formulation from the container to the point of emission, naming each valve part it passes through in order.","Dip tube → housing → stem → actuator (chamber) → discharged from the emission orifice."],
+["Why is the housing described as linking the dip tube to the stem and actuator, and what does its orifice help control?","It sits directly below the mounting cup and forms the connecting passage between the dip tube (product intake) and the stem/actuator (product release); together with the stem, its orifice size helps set the delivery rate and the form in which product is emitted."],
+["Describe the sequence of MDI chamber states from a resting valve to a completed actuation and reset.","Resting/closed: chamber is sealed from atmosphere, open to and filling from the container. Actuator pressed: chamber seals from the container and opens to the atmosphere, releasing the metered dose. Actuator released: system resets and the chamber refills for the next dose."],
+["What does \"dual valve mechanism\" mean in the context of an MDI's metering chamber?","Two seals operate simultaneously and reciprocally — as one opens the other closes — so the chamber is never open to both the container and the atmosphere at once, keeping each discharged dose a fixed, reproducible amount."],
+["Why is cold filling unsuitable for aqueous aerosol formulations, and what filling method would you use instead?","Cold filling requires cooling to about -34.5°C to -40°C, which would freeze any water in the formulation; pressure filling should be used instead since it is performed without such extreme cooling."],
+["Explain why pressure filling generally results in less moisture contamination than cold filling.","Pressure filling avoids the very cold conditions that promote atmospheric moisture condensation, whereas cold filling's low temperatures make moisture pickup and contamination more likely."],
+["Describe what determines when propellant stops flowing into a container during pressure filling.","Propellant enters under its own vapor pressure until the pressure inside the container equals the pressure in the supplying burette, at which point flow stops automatically."],
+["Why is the valve discharge rate expressed in grams per unit of time rather than as a fixed single measurement?","Because it is calculated from the weight lost by a previously weighed aerosol over a timed discharge, so it reflects a rate of delivery rather than a one-time quantity."],
+["Name three additional attributes filled aerosols may be tested for beyond leaks, and explain why one matters specifically for metered valves.","Spray pattern, particle size distribution, and dosage accuracy/reproducibility; metered valves need dosage accuracy/reproducibility checked because each actuation must reliably deliver the same measured dose to the patient."],
+["Why does storing an aerosol canister in the cold reduce the amount of spray produced?","Cold reduces the propellant's vapor pressure, so the correspondingly lower internal pressure produces a weaker discharge than at the intended ambient range of 15°C to 30°C."],
+["Explain the safety reasoning behind warning labels about heat exposure and incineration.","Labels must warn against using or storing containers near heat or open flame and against incinerating them, because heating a pressurized container raises internal pressure and can cause it to rupture or explode."],
+["Explain the mechanism by which a spacer helps patients who cannot coordinate actuation with inhalation.","By sitting between the mouthpiece and the mouth, a spacer holds the discharged dose available for 3 to 5 seconds, decoupling the moment of actuation from the moment of inhalation."],
+["Explain the causal chain by which a spacer reduces oropharyngeal drug deposition.","The spacer allows time for the fluorohydrocarbon propellant to evaporate, which reduces both aerosol velocity and droplet size; smaller, slower particles are less likely to impact the oropharynx before reaching the lower airway."],
+["Compare how pMDIs and DPIs each address the inhalation-actuation coordination problem.","pMDIs require the patient to coordinate pressing the actuator with inhaling (a spacer can compensate), whereas DPIs sidestep the problem entirely by being breath-actuated, releasing the dose only when the patient inhales."],
+["Why might a DPI be a poor choice for a patient with severe respiratory disease?","Because DPI dose delivery — liberation of powder and its deaggregation into fine particles — depends on the strength of the patient's own inspiratory effort, which may be impaired in significant respiratory disease."],
+["Explain why humidity is a formulation concern specifically for DPIs but not for pressurized MDIs.","DPI powder is exposed to ambient atmospheric conditions, and elevated humidity can cause it to aggregate; pMDI drug is sealed inside a pressurized, propellant-based liquid system that ambient humidity cannot directly reach."],
+["What is the trade-off between DPIs and pMDIs regarding excipients and achievable dose size?","DPIs are propellant-free and typically use only a lactose carrier as excipient, and this simpler system can also carry larger drug doses per actuation than a pMDI."],
+["Explain why a medicated foam is described as an emulsion rather than a simple gas-in-can product.","It has a dispersed phase (gas bubbles) distributed within a continuous liquid phase carrying the API, the defining structure of an emulsion, and this structure is created only at the point of application."],
+["Why are surfactants necessary in a medicated foam formulation?","They stabilize the dispersion of the gas bubbles within the liquid phase, which is required to generate and maintain a foam structure rather than have the two phases separate."],
+["Explain how the placement of the propellant (internal vs. external phase) determines whether a stable foam or a spray/quick-breaking foam is produced.","Propellant in the internal (discontinuous) phase yields a stable, structured foam on discharge; propellant in the external (continuous) phase escapes rapidly and produces a spray or a quick-breaking foam."],
+["Why might a formulator deliberately choose a quick-breaking foam formulated with alcohol for a topical antiseptic product?","Such foams create a cooling sensation on application and can carry disinfectant properties, both desirable for an antiseptic use, while still spreading and breaking down for full skin contact."],
+["Compare cold filling and pressure filling in terms of when the valve assembly is attached relative to when propellant enters the container.","In pressure filling, the valve is inserted and crimped onto the container before liquefied gas is metered in through the valve stem; in cold filling, liquefied gas is added directly to the open, chilled container along with the chilled concentrate."],
+["Why must valve materials be both inert and FDA-approved, rather than just physically durable?","Because the valve's internal parts are in constant contact with the drug formulation; a chemically reactive material could degrade the product's stability or generate toxic byproducts, making material choice a drug-safety issue."],
+["Explain the relationship between orifice size, propellant quantity, and the four possible discharge forms.","Larger orifices paired with less propellant favor coarser, low-velocity forms like solid streams and foams, while smaller orifices paired with more propellant favor finer, high-velocity forms like sprays and mists."],
+["Why does the dip tube's inner diameter vary between different aerosol products?","Because it must be sized appropriately for the product's viscosity and its intended delivery rate."],
+["What would likely happen if a formulation intended for foam discharge were packaged with a small-orifice actuator meant for fine mists?","The small orifice would tend to atomize the product into a finer spray rather than allow the coarser discharge needed to generate a foam."],
+["Why is \"sealed from the atmosphere\" alone not sufficient to describe the resting state of an MDI's metering chamber?","The chamber must also be simultaneously open to the container, so it can refill with drug suspension/solution and propellant between doses."],
+["Explain why pressure filling stops automatically rather than needing to be manually timed.","Propellant enters under its own vapor pressure, and this flow self-limits once the container's internal pressure rises to equal the pressure of the propellant in the supply burette."],
+["Explain why testing \"for leaks or weakness\" is performed under various environmental conditions rather than at a single fixed condition.","Because the container will be exposed to a range of real-world conditions (temperature extremes during storage, shipping, handling) after leaving the factory."],
+["Contrast a DPI disadvantage regarding external conditions with an advantage it has regarding delivered dose.","DPIs are disadvantaged by exposure to ambient humidity, which can cause powder aggregation, yet they are simultaneously advantaged over pMDIs in being able to deliver larger drug doses."],
+["Why do labels instruct users to shake certain aerosol products and hold them at a specific angle or distance?","Shaking re-suspends or re-mixes formulation components so the correct dose concentration reaches the valve, while proper angle/distance ensures the discharged product reaches its intended target correctly."],
+["Explain why a protective cap is considered part of the packaging system rather than a cosmetic addition.","It fits snugly over the valve and mounting cup to keep dust and dirt out of the valve mechanism, protecting the functional components that control accurate, safe dosing."],
+["Compare the purpose of a spacer's 3–5 second timing window with the purpose of the MDI's own dual-valve reset.","The MDI's dual valve mechanism ensures a fixed, reproducible dose is metered and ready at each actuation, while the spacer's timing window gives the patient time to inhale that already-discharged dose without needing to time their breath exactly."],
+["Why would a medicated foam intended for open wounds require sterility, when other topical foams do not?","Open wounds and severely injured skin lack the intact skin barrier that normally protects against microbial invasion, so a non-sterile foam could introduce infection directly into vulnerable tissue."],
+["What does the presence of \"aqueous or nonaqueous liquids\" as a possible foam component tell you about foam formulation flexibility?","It shows foams are not restricted to a single vehicle type — the liquid continuous phase can be water-based or non-water-based, letting formulators choose whichever vehicle best suits the API's solubility and stability needs."],
+["Why does the text distinguish \"quick-breaking\" foams from foams meant to \"remain as foam\"?","Because intended use dictates needed contact behavior — a foam for prolonged skin contact should hold its structure, while a foam for rapid spreading/absorption should collapse to liquid quickly."],
+["Explain why the gasket's location \"with the stem\" is functionally important rather than incidental.","The stem is the moving part through which formulation travels when the valve opens; positioning the gasket snugly against it seals that same interface, preventing leakage where the valve is otherwise open to the pressurized contents."],
+["Why does the text specify that DPI capsules are made of hard gelatin or hypromellose rather than any capsule material?","These materials can be reliably pierced to release a precise powder dose without reacting with the dry powder formulation, and hypromellose offers a moisture-resistant alternative to gelatin."],
+["What underlying mechanical principle is shared by the spring in a spray valve and the dual-valve mechanism in an MDI?","Both reliably restore the system to a defined resting/closed state after each actuation, ensuring the valve is ready to deliver a consistent dose next time."],
+["Why would increasing the amount of propellant (with a fixed small orifice) tend to produce a finer mist rather than a coarser stream?","More propellant increases the driving vapor pressure behind the formulation, atomizing it more forcefully through the same small orifice into smaller droplets."],
+["Explain why the housing's orifice and the stem work together, rather than either alone, to determine delivery rate and form.","Formulation must pass sequentially from the housing's orifice into the stem before reaching the actuator, so the combined dimensions — not just one alone — set the overall delivery rate and emitted form."],
+["Why is \"less propellant lost in the process\" listed as an advantage of pressure filling specifically over cold filling?","Cold filling exposes propellant to an open container and cold-temperature transfer, offering more opportunity for evaporative loss, whereas pressure filling delivers propellant through an already-crimped, sealed valve stem."],
+["What does the need to test \"accuracy and reproducibility of dosage when using metered valves\" imply about how metered-valve products are evaluated?","It implies metered-valve products carry an added requirement — each actuation must deliver a consistent, accurate dose — beyond what's needed for a non-metered spray."],
+["Why does the text pair \"holding at the proper angle\" with \"distance from the target\" as label instructions?","Both factors jointly determine where and how the discharged product lands; the wrong angle or wrong distance can each independently cause the product to miss its target or be applied unevenly."],
+["Explain why a stable foam and a fine mist represent opposite ends of the same underlying design spectrum.","Both trace back to the same variables — orifice size, propellant quantity, and (for foams) internal vs. external phase — so shifting along that spectrum moves the product from a coarse, structured foam toward a fine, dispersed mist."],
+["Why might a manufacturer choose pressure filling over cold filling even for a non-aqueous product?","Pressure filling still offers less moisture contamination risk and less propellant loss regardless of whether the formulation is aqueous, making it generally preferred for most pharmaceutical aerosols."],
+["Why does inhaling from a DPI depend on patient technique in a way that pressing a pMDI actuator does not?","A DPI's dose is only liberated and broken into fine particles by the force of the patient's own inhalation, so a weak breath directly limits the delivered dose, whereas a pMDI's propellant discharges the dose regardless of breathing."]
+];
+
+const flashcardsL3 = [
+["A formulator wants an aerosol product to discharge as a fine, fast-moving mist rather than a foam. Walk through every design lever mentioned in the material that could achieve this, and explain the mechanism behind each.","(1) Use a smaller actuator emission orifice, which increases atomization/velocity for a given pressure; (2) increase the amount of propellant, which raises the driving vapor pressure forcing finer atomization through the orifice; (3) for a foam-type product, ensure the propellant sits in the external (continuous) phase rather than the internal phase, since internal-phase propellant instead yields a stable foam on discharge."],
+["Trace the complete dose cycle of a pressurized MDI from rest through actuation to reset, specifying which seal is open/closed at each stage and what happens to the chamber's contents.","At rest: container-side seal open, atmosphere-side seal closed — chamber fills with drug suspension/solution and propellant. On actuation: the seals reverse simultaneously — container-side closes, atmosphere-side opens, releasing the fixed dose. On release: seals return to resting configuration and the chamber refills for the next dose."],
+["Explain why a manufacturer producing an aqueous suspension aerosol is forced to select pressure filling over cold filling, identifying the specific physical property responsible.","Cold filling requires cooling to roughly -34.5°C to -40°C to liquefy the propellant gas; water's freezing point is far above this range, so any aqueous component would solidify into ice during cold filling, making the process physically impossible for aqueous systems."],
+["A dip tube/housing sized for a low-viscosity, fast-delivery product is mistakenly installed on a highly viscous, slow-delivery formulation. Predict the consequence and name the violated design principle.","The bore, sized for a thin, fast-flowing liquid, would likely be mis-dimensioned for the viscous product, probably causing inadequate or inconsistent delivery; this violates the principle that dip tube/housing dimensions must be matched to the product's specific viscosity and intended delivery rate."],
+["Trace the physical fate of a drug droplet with and without a spacer, explaining why oropharyngeal deposition differs between the two scenarios.","Without a spacer, a droplet leaves at high velocity and relatively large size, so its momentum carries it into the oropharynx where it impacts before it can be inhaled deeper. With a spacer, the droplet is held for 3–5 seconds while propellant evaporates, shrinking and slowing it so it is more likely to follow the airstream past the oropharynx into the lower airway."],
+["A patient in severe asthma exacerbation (very weak inspiratory effort) is prescribed either a DPI or a pMDI-with-spacer. Argue which is more appropriate using only mechanistic facts from the material.","The pMDI-with-spacer is more appropriate: a DPI's dose liberation depends entirely on the force of the patient's own inhalation, which is compromised during an exacerbation, whereas a pMDI's propellant discharges the dose regardless of inhalation strength, and the spacer separately solves any coordination problem."],
+["Explain whether \"DPIs are propellant-free\" and \"DPIs are humidity-sensitive\" are in tension, or share a common root cause.","They share a common root cause, not tension: being propellant-free means the powder is not sealed inside a pressurized liquid propellant system, which is precisely what removes the propellant but also leaves the dry powder directly exposed to ambient humidity."],
+["Match a quick-breaking alcohol-based foam and a stable foam to (a) a rapidly-absorbed scalp treatment and (b) a protective barrier foam for extended skin contact, justifying with the phase-location principle.","(a) The quick-breaking foam suits the scalp treatment, since external-phase propellant collapses the foam to liquid quickly, allowing rapid spreading/absorption. (b) The stable foam suits the barrier use, since internal-phase propellant produces a structurally stable foam that holds its form for prolonged contact."],
+["Reconstruct the complete list of variables that jointly influence emitted aerosol form, classifying each as device-related or formulation-related.","Device-related: actuator inner chamber design, actuator orifice size, housing orifice size, stem dimensions. Formulation-related: type and quantity of propellant. Together they interact (larger orifice + less propellant → foam/solid stream; smaller orifice + more propellant → mist/spray)."],
+["Justify why pressure filling is the industry-standard choice for minimizing both moisture contamination and propellant loss simultaneously.","Pressure filling avoids the extreme sub-zero cooling that cold filling requires; that cooling is the shared root cause of both moisture condensation risk and evaporative propellant loss during cold filling's more open, cold transfer, whereas pressure filling meters propellant through an already-crimped, sealed valve stem under controlled pressure equalization."],
+["Explain why discharge-rate testing requires weighing before and after a timed discharge rather than simply timing the spray.","Weighing before and after gives the precise mass actually discharged over the measured period, yielding an objective discharge rate (grams/time); timing alone would not indicate how much material left the container, since discharge could vary in force without a measurable time difference."],
+["Explain the functional necessity of the capsule-piercing step in a capsule-based DPI, and predict the consequence if piercing fails.","The capsule must be pierced to expose the powdered dose to the patient's inhaled airflow, since there is no propellant to force the drug out. If piercing fails, the powder remains sealed inside and no dose (or an incomplete one) is delivered, regardless of inhalation effort."],
+["Using the mounting cup's compatibility requirement, argue why FDA material approval should extend to every valve component, not just those visibly in contact with the drug during discharge.","The mounting cup's underside is not part of the visible discharge pathway, yet it is still exposed to the formulation and subject to the same compatibility standard as the container — showing that exposure to the formulation, not visibility during use, is the relevant criterion, and every listed component has some contact with or adjacency to the formulation at some stage."],
+["A metered-dose aerosol delivers noticeably less product on a cold day despite the valve passing mechanical checks. Explain both why this happens and why the product is still considered to be working correctly.","It happens because cold canisters give less than the usual spray, as cold reduces propellant vapor pressure and thus the driving force behind discharge; it is still working correctly because the recommended range is 15°C to 30°C, so cold-day underperformance reflects use outside the validated range, not a valve malfunction."],
+["Compare testing criteria for general aerosols versus metered-dose aerosols specifically, explaining the added rationale for the metered-dose-specific criterion.","General testing covers leaks/weakness, discharge rate, spray pattern, and particle size distribution. Metered-dose products are additionally tested for accuracy/reproducibility of dosage because each individual actuation must deliver the same precise, pre-determined dose every time, unlike a general spray where total amount used is user-controlled."],
+["List the seven valve-assembly parts from Figure 14.13 in order from topmost to the part reaching furthest into the container.","Actuator (topmost) → stem → mounting cup/gasket/spring (near the crimped seal) → housing (below the mounting cup) → dip tube (extends furthest into the product)."],
+["In the pMDI diagram (Fig. 39.2), name the components a dose passes through, in order, from the drug suspension to exiting the mouthpiece.","Drug suspension/solution in propellant (canister) → metering valve → actuator seat → actuator orifice → out through the actuator/mouthpiece assembly."],
+["In the metering valve diagram (Fig. 39.3), explain the functional difference between the \"opening for emptying of metering chamber\" and the \"opening to actuator seat,\" relating each to the dual-valve mechanism.","The \"opening for emptying of metering chamber\" corresponds to the container-side seal, through which the chamber fills from the container; the \"opening to actuator seat\" corresponds to the atmosphere-side seal, through which the metered dose is released on actuation. The two open and close reciprocally."],
+["In the spacer/facemask diagram (Fig. 39.4), explain the functional purpose of the one-way valve.","It allows the discharged aerosol cloud to be drawn out toward the patient during inhalation but prevents exhaled breath from being pushed back into the spacer/canister assembly, preserving the held dose for effective inhalation."],
+["In the Turbohaler diagram (Fig. 39.7), explain how the turning grip, dosing unit, and scraper work together to deliver one metered dose.","Turning the grip meters powder from the storage unit into the dosing unit, which holds a single metered dose; the scraper removes excess powder from the dosing unit so only the intended precise dose remains, ready to be drawn through the inhalation channel on inhalation."],
+["A quality control chemist finds correct total discharge rate but poor dose reproducibility between actuations. Explain why these two results can diverge.","Discharge rate measures average mass per unit time across a timed period, which can mask actuation-to-actuation variability that dose reproducibility testing specifically evaluates — a normal average rate does not guarantee every single dose is accurate or consistent."],
+["Explain why \"less propellant lost\" during pressure filling plausibly also supports more consistent final fill weights, even though the text doesn't state this explicitly.","If less propellant escapes/evaporates during filling, the amount sealed in each container more closely and consistently matches the intended amount, batch to batch, whereas cold filling's more variable evaporative loss during its open, cold transfer would translate into greater unit-to-unit variability."],
+["Identify at least two respects in which the claim \"DPIs are strictly superior to pMDIs because they eliminate the coordination problem\" oversimplifies the comparison.","(1) DPIs introduce a new dependency on the patient's own inspiratory strength, a limitation pMDIs (especially with a spacer) do not share to the same degree; (2) DPIs are vulnerable to ambient humidity affecting formulation stability, a vulnerability sealed pMDIs do not have."],
+["A large-orifice actuator intended for foam discharge is combined with a much larger quantity of propellant. Predict the effect on discharge form, integrating two design principles.","Much more propellant pushes toward finer, higher-velocity discharge (favoring sprays/mists), directly counteracting the large orifice's tendency (normally paired with less propellant) to favor foams/solid streams — the mismatched variables likely yield an inconsistent, coarse spray rather than a clean foam."],
+["Explain why medicated foams are \"formed at the time of application\" rather than existing as foam inside the sealed container, connecting this to the internal-phase propellant mechanism.","Inside the sealed container, internal-phase propellant remains dissolved/dispersed within liquid droplets under pressure, so the product exists as a liquid/emulsion; only upon discharge, when pressure releases and the propellant rapidly expands into gas, do stable bubbles form and disperse (with surfactant help) into the foam structure."],
+["Predict which of two otherwise identical non-aqueous products — one cold-filled, one pressure-filled — is more likely to show higher propellant-content variability across units, and justify with two facts.","The cold-filled product is more likely to show higher variability, because cold filling's open, cold transfer process risks evaporative propellant loss, and the text specifically credits pressure filling with less propellant lost — implying cold filling inherently loses more, and inconsistently, across units."],
+["Reconcile the fact that spacers were \"originally developed\" for coordination-impaired patients with the fact that they also reduce oropharyngeal deposition for any user.","Both facts arise from the same single design feature — the delay chamber. It decouples timing (solving the original coordination problem) and, as a side effect of the delay, gives propellant time to evaporate, reducing velocity/droplet size (benefiting oropharyngeal deposition for any user)."],
+["Explain why a facemask, rather than a mouthpiece, is paired with a spacer for pediatric use, connecting it to the general spacer mechanism.","Infants and young children cannot reliably seal around or coordinate breathing through a mouthpiece, so a facemask instead allows the child to inhale the held dose through normal tidal breathing over the spacer's 3–5 second window."],
+["Explain why the text specifies materials must be inert to \"formulations\" (plural) rather than to one specific formulation.","A single valve design is typically used or adapted across multiple different drug formulations, so materials must be broadly inert rather than validated for only one product — implying valve component qualification is a general materials-compatibility exercise applicable across product lines."],
+["Explain why a small-scale compounding facility without cryogenic cooling would be functionally restricted from using cold filling.","Cold filling requires cooling to roughly -34.5°C to -40°C, temperatures needing specialized cryogenic refrigeration equipment not typically available in a small compounding setting, unlike pressure filling which uses ambient-temperature equipment."],
+["A stable foam formulation is accidentally manufactured with propellant in the external rather than internal phase. Predict the resulting behavior and explain the mechanistic deviation.","The product would likely emerge as a spray or quick-breaking foam rather than a stable foam, because propellant in the external (continuous) phase escapes rapidly through that phase upon release of pressure, collapsing or preventing the sustained bubble structure a stable foam requires."],
+["Rank pMDI-alone, pMDI-with-spacer, DPI, and metered-valve accuracy testing from most to least dependent on patient technique, and justify.","DPI is most patient-technique-dependent, since dose liberation itself comes from inhalation; pMDI-alone next, relying on unaided actuation-inhalation timing; pMDI-with-spacer next, since the spacer's delay chamber reduces (without eliminating) the timing burden; metered-valve accuracy testing is a pure device/manufacturing attribute, independent of any patient."],
+["Explain why \"particle size distribution of the spray\" is tested separately from \"discharge rate,\" even though both relate to emission.","Discharge rate measures total mass emitted per unit time (a bulk quantity), while particle size distribution characterizes how that mass divides into droplets of varying sizes (a quality/form measure) — two products can share one value yet differ markedly in the other."],
+["Determine whether \"the housing orifice/stem set delivery rate\" and \"dip tube/housing dimensions are set by viscosity and delivery rate\" are circular statements, and justify.","They are not circular; they describe two sequential design decisions — a target delivery rate is first decided based on the product's viscosity and intended use, and the housing orifice/stem (and dip tube bore) are then engineered to achieve that target."],
+["List, in order of importance, the changes required to convert a fine-mist nasal spray into a foam-based topical product using the same concentrate, explaining each.","(1) Shift the propellant to the internal (discontinuous) phase, since this produces a stable foam rather than a spray; (2) add appropriate surfactants to ensure proper gas dispersion and foam structure; (3) redesign the actuator with a larger orifice and reduce propellant quantity, since these favor foam/solid-stream discharge over fine mist."],
+["Explain why a DPI (breath-actuated) and a pMDI-with-spacer (coordination-tolerant) can both be considered valid solutions to the same coordination problem despite opposite strategies.","Both target the same failure mode — mistimed drug release versus inhalation — but solve it oppositely: the DPI eliminates the timing requirement by tying release directly to inhalation, while the spacer widens the timing window during which an already-released dose can still be captured by inhalation."],
+["A batch of pressurized MDIs fails leak testing at low temperature but passes at room temperature. Propose the most likely explanation.","Lower temperature reduces internal propellant vapor pressure (as reflected in cold canisters producing less spray), which could reveal marginal seal/crimp integrity issues masked at the higher pressures present within the normal 15–30°C range."],
+["Argue for or against: \"The mounting cup is functionally more similar to the container than to the other mechanical valve parts.\"","Argument for: the mounting cup's underside must meet the same compatibility criteria as the container interior, potentially needing the same protective coatings (epoxy resin or vinyl), unlike the actuator, stem, gasket, or spring, whose functions are purely mechanical with no stated container-like compatibility requirement — supporting the statement."],
+["Explain why an alcohol-based quick-breaking foam produces a cooling sensation while a stable, non-alcohol foam typically does not.","The cooling effect depends on formulation-specific factors — alcohol content and rapid phase collapse — neither of which is present in a stable, non-alcohol foam whose propellant sits in the internal phase and does not collapse quickly."],
+["Synthesize the material into a single design principle explaining why discharge form, filling method, spacer benefit, DPI trade-offs, and foam type all trace back to one variable, with four examples.","The unifying principle is propellant quantity, phase location, and physical state: (1) propellant quantity and orifice size set discharge form; (2) needing to liquefy propellant via cooling (or avoiding this) differentiates cold from pressure filling; (3) a spacer's benefit arises from giving propellant time to evaporate; (4) DPIs being propellant-free is simultaneously their key advantage and the root of their humidity vulnerability; (5) whether a foam is stable or quick-breaking depends entirely on internal vs. external phase propellant placement."]
+];
+
+const flashcardSets = {1: flashcardsL1, 2: flashcardsL2, 3: flashcardsL3};
+const fcGrid = document.getElementById('fc-grid');
+function renderFlashcards(level){
+  const cards = flashcardSets[level];
+  document.getElementById('fc-count').textContent = cards.length + ' cards';
+  fcGrid.innerHTML = '';
+  cards.forEach((c,i)=>{
+    const card = document.createElement('div');
+    card.className='fc-card';
+    card.innerHTML = '<div class="fc-inner">'+
+      '<div class="fc-face fc-front"><span class="fc-tag">#'+(i+1)+'</span>'+c[0]+'</div>'+
+      '<div class="fc-face fc-back"><span class="fc-tag">answer</span>'+c[1]+'</div>'+
+    '</div>';
+    card.addEventListener('click',()=>card.classList.toggle('flipped'));
+    fcGrid.appendChild(card);
+  });
+}
+document.querySelectorAll('#fc-level-nav .level-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('#fc-level-nav .level-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderFlashcards(parseInt(btn.dataset.difficulty,10));
+  });
+});
+renderFlashcards(1);
+
+/* ============ QUIZ ============ */
+const quizL1 = [
+["What is the primary function of an aerosol valve assembly?","To release the contents in the desired form, rate, and — for metered valves — dose",["To pressurize the propellant gas","To sterilize the formulation","To color-code the product"]],
+["Valve materials must be inert to the formulation and approved by which body?","FDA",["WHO","USP Board","EPA"]],
+["Which material is used in the manufacture of aerosol valve parts?","Stainless steel",["Copper","Titanium","Glass"]],
+["Which valve part is the button the user presses?","Actuator",["Stem","Gasket","Housing"]],
+["Which valve part supports the actuator and delivers formulation to its chamber?","Stem",["Spring","Dip tube","Mounting cup"]],
+["Which valve part prevents leakage when the valve is closed?","Gasket",["Housing","Spring","Dip tube"]],
+["Which valve part returns the actuator to the closed position?","Spring",["Gasket","Stem","Mounting cup"]],
+["Which valve part is attached to the can and holds the valve in place?","Mounting cup",["Housing","Dip tube","Actuator"]],
+["Which valve part links the dip tube with the stem and actuator?","Housing",["Gasket","Spring","Mounting cup"]],
+["Which valve part extends into the product to bring formulation to the valve?","Dip tube",["Stem","Housing","Gasket"]],
+["What four physical forms can an aerosol product be discharged as?","Mist, coarse spray, solid stream, or foam",["Only mist and spray","Only liquid and solid","Gas, liquid, solid, plasma"]],
+["What two factors set the inner dimensions of the dip tube and housing?","Product viscosity and intended delivery rate",["Can size and propellant type","Actuator color and shape","Container material and cost"]],
+["What may coat the underside of a mounting cup to prevent an undesired interaction?","Epoxy resin or vinyl",["Silicone oil","Beeswax","Latex rubber"]],
+["Larger orifices and less propellant are typically used to emit which two forms?","Foams and solid streams",["Sprays and mists","Powders and gels","Aerosolized liquids only"]],
+["In a metered-dose inhaler, what regulates the discharged dose amount?","An auxiliary valve (metering) chamber",["The dip tube diameter","The mounting cup","The propellant temperature"]],
+["What controls the integrity of the metering chamber in an MDI?","A dual valve mechanism",["A single spring","A capsule shell","A dip tube valve"]],
+["When the MDI actuator is closed, the metering chamber is:","Sealed from the atmosphere and open to the container",["Open to the atmosphere and sealed from the container","Open to both atmosphere and container","Sealed from both"]],
+["Depressing the MDI actuator causes the chamber to:","Open to the atmosphere and seal from the container",["Seal from the atmosphere and open to the container","Remain unchanged","Seal from both"]],
+["What happens when the MDI actuator is released?","The system resets, ready to refill for the next dose",["The chamber stays open to the atmosphere","The valve locks permanently","The chamber empties into the atmosphere continuously"]],
+["In cold filling, product concentrate and propellant are cooled to approximately:","-34.5°C to -40°C",["0°C to -10°C","-60°C to -70°C","4°C to 8°C"]],
+["Why must propellant be cooled during cold filling?","To liquefy the propellant gas",["To sterilize it","To increase its viscosity","To dissolve the API"]],
+["In cold filling, what is added after the chilled concentrate is metered into the container?","Liquefied propellant gas",["Compressed air","Distilled water","Nitrogen gas"]],
+["What displaces the air in the container during cold filling?","Heavy vapors of the cold liquid propellant",["A vacuum pump","Nitrogen purge","The mounting cup seal"]],
+["Why can't aqueous systems be cold filled?","The water would freeze to ice",["The water would boil","The valve would corrode","The propellant would dissolve"]],
+["In pressure filling, where is the product concentrate placed first?","Quantitatively into the aerosol container",["Into the pressure burette","Into the dip tube directly","Into a separate cooling chamber"]],
+["In pressure filling, what step follows placing the concentrate in the container?","The valve assembly is inserted and crimped into place",["The container is frozen","The label is applied","The cap is glued shut"]],
+["In pressure filling, the liquefied gas is metered into the valve stem from a:","Pressure burette",["Dip tube reservoir","Cold jacket","Vacuum chamber"]],
+["Propellant flow stops during pressure filling when:","Pressure in the container equals pressure in the burette",["The container is full to the brim","The valve is manually closed","A timer expires"]],
+["Which filling method is used for most pharmaceutical aerosols?","Pressure filling",["Cold filling","Vacuum filling","Gravity filling"]],
+["Compared with cold filling, pressure filling has less risk of:","Moisture contamination",["Valve leakage","Propellant leakage under long storage","Discoloration"]],
+["Compared with cold filling, pressure filling loses less:","Propellant",["Product concentrate","Container weight","Labeling accuracy"]],
+["After filling, aerosol containers are tested under various environmental conditions for:","Leaks or weakness in the valve assembly or container",["Color consistency","Label adhesive strength","Flavor profile"]],
+["The valve discharge rate is calculated from:","The weight difference of a previously weighed aerosol discharged over a period of time",["The volume of the container","The pressure gauge reading","The color of the spray"]],
+["Besides discharge rate, aerosols may also be tested for:","Spray pattern, particle size distribution, and dosage reproducibility",["Flavor and scent","Shelf color fading","Label adhesive strength"]],
+["The protective cap on an aerosol product mainly protects the valve from:","Dust and dirt contamination",["UV light","Moisture only","Electromagnetic interference"]],
+["Aerosol labels must warn users not to:","Puncture, use/store near heat, or incinerate the container",["Shake it before use","Store it upright","Keep it below 30°C"]],
+["The generally recommended storage temperature range for aerosol products is:","15°C to 30°C",["0°C to 10°C","30°C to 45°C","-10°C to 5°C"]],
+["What happens to the spray when an aerosol canister is cold?","Less than the usual spray is produced",["More than the usual spray is produced","The valve locks shut","The propellant leaks out"]],
+["Pharmaceutical aerosol labels give instructions on shaking before use and:","Holding at the proper angle and/or distance from the target",["Storing upside down permanently","Refrigerating before every use","Diluting with water first"]],
+["Extender devices (spacers) were originally developed for patients who:","Could not coordinate actuation with inhalation",["Had asthma only","Needed larger doses","Could not hold the canister"]],
+["A spacer is placed between:","The MDI mouthpiece and the patient's mouth",["The canister and the valve","The dip tube and housing","The actuator and stem"]],
+["A spacer can separate actuation from inhalation by up to:","3 to 5 seconds",["10 to 15 seconds","30 seconds","1 second"]],
+["Why does a spacer reduce droplet size before inhalation?","It allows time for the propellant to evaporate",["It cools the droplets electrically","It filters out large droplets","It adds humidity to the spray"]],
+["A key benefit of the reduced droplet size from a spacer is:","Less drug deposition in the oropharynx",["Faster onset of action","Higher total dose delivered","Longer canister life"]],
+["In a dry powder inhaler (DPI), the drug is inhaled as:","A cloud of fine particles",["A fine mist of droplets","A dissolved solution","A foam"]],
+["DPI drug may be filled into which type of capsule?","Hard gelatin or hypromellose capsules",["Soft gelatin capsules","Enteric-coated tablets","Blister-sealed liquid pods"]],
+["DPI formulations are usually free of:","Propellant",["Drug substance","Lactose carrier","Moisture"]],
+["The usual carrier/excipient in DPI formulations is:","Lactose",["Starch","Cellulose","Sorbitol"]],
+["DPIs avoid the coordination problem of pMDIs because they are:","Breath-actuated",["Gravity-actuated","Spring-actuated","Heat-actuated"]],
+["Compared with pMDIs, DPIs can deliver:","Larger drug doses",["Only smaller drug doses","Identical doses only","No measurable doses"]],
+["A disadvantage of DPIs is that powder liberation depends on:","The patient's ability to inhale",["The ambient light level","The canister pressure","The actuator spring tension"]],
+["Elevated humidity can cause DPI powders to:","Aggregate",["Dissolve completely","Ignite","Lose color"]],
+["A medicated foam is structurally described as:","An emulsion with dispersed gas bubbles in a liquid continuous phase",["A suspension of solid particles in gas","A pure gas with no liquid phase","A solid matrix with trapped liquid"]],
+["A medicated foam is actually formed:","At the time of application",["During manufacturing only","Only after refrigeration","When the can is shaken twice"]],
+["In foam formulations, surfactants function to:","Ensure dispersion of the gas and the two phases",["Dissolve the API completely","Thicken the liquid phase only","Prevent propellant evaporation"]],
+["Foams intended for severely injured skin or open wounds must be:","Sterile",["Colored","Alcohol-based","Quick-breaking"]],
+["If the propellant sits in the internal (discontinuous) phase, the foam discharged is:","A stable foam",["A quick-breaking foam","A fine spray","A solid stream"]],
+["If the propellant sits in the external (continuous) phase, the product discharged is:","A spray or quick-breaking foam",["A stable long-lasting foam","A dry powder","A solid stream"]],
+["Quick-breaking foams formulated with alcohol may also have:","Disinfectant properties",["Antioxidant properties","UV-protective properties","Anesthetic properties only"]],
+["The general consistency of a medicated foam is described as:","Fluffy and semisolid",["Thin and watery","Hard and brittle","Dry and powdery"]]
+];
+
+const quizL2 = [
+["Larger orifices combined with less propellant are used because they primarily favor which two discharge forms?","Foams and solid streams",["Fine mists and coarse sprays only","Only liquid streams","Only powders"]],
+["What must be true of an MDI's metering chamber for it to refill correctly between doses?","It must stay open to the container while sealed from the atmosphere",["It must stay open to the atmosphere while sealed from the container","It must be open to both at once","It must be sealed from both"]],
+["Why can't cold filling be used for aqueous aerosol formulations?","The temperatures needed to liquefy the propellant would freeze the water",["Aqueous formulations react with liquefied propellant","Aqueous formulations are too viscous to meter","Cold filling requires a vacuum incompatible with water"]],
+["Pressure filling reduces moisture contamination compared with cold filling mainly because:","It avoids the very cold conditions that promote moisture condensation",["It uses a desiccant in the burette","It seals the container before adding concentrate","It requires less handling time overall"]],
+["What determines the moment propellant stops flowing into a container during pressure filling?","Container pressure rising to equal the burette's pressure",["A mechanical timer","The valve crimping automatically","The operator manually closing a tap"]],
+["Why is valve discharge rate reported as grams per unit time rather than as a single fixed value?","Because it's calculated from weight loss over a timed discharge, describing a rate",["Because grams cannot be measured directly","Because time is irrelevant to weight loss","Because it must match label claims exactly"]],
+["Metered valves require an additional quality test beyond leak testing because:","Each actuation must reliably deliver an accurate, reproducible dose",["Metered valves are more prone to rusting","Metered valves use different plastics","Metered valves cannot be pressure-tested"]],
+["Storing an aerosol canister in cold conditions reduces spray output mainly because:","Lower temperature reduces the propellant's vapor pressure",["Cold air is denser and blocks the orifice","Cold causes the gasket to swell shut","Cold thickens the drug formulation only"]],
+["Aerosol labels warn against heat exposure and incineration chiefly because:","Heating a pressurized container can raise internal pressure enough to rupture it",["Heat degrades the drug's color","Heat causes labels to peel off","Heat makes the cap difficult to remove"]],
+["A spacer helps patients with poor actuation-inhalation coordination mainly by:","Holding the discharged dose available so inhalation can happen 3–5 seconds later",["Automatically triggering the MDI actuator","Filtering out oversized particles only","Increasing the drug concentration in each dose"]],
+["A spacer reduces oropharyngeal deposition primarily through which mechanism?","Giving propellant time to evaporate, reducing velocity and droplet size",["Adding a charcoal filter to trap large particles","Cooling the aerosol chemically","Increasing the dose to compensate for losses"]],
+["Compared with pMDIs, DPIs avoid the coordination problem because:","They are breath-actuated, releasing the dose only on inhalation",["They require no inhalation at all","They use a mouth sensor to fire automatically","They have no dose-release mechanism"]],
+["A DPI may be less suitable for a patient with severe respiratory disease because:","Powder liberation and deaggregation depend on the strength of the patient's own inhalation",["DPIs require refrigeration that patients can't manage","DPIs need a strong exhalation, not inhalation","DPIs cannot be used with a mouthpiece"]],
+["Elevated humidity specifically threatens DPI performance because:","It can cause the powder to absorb moisture and aggregate",["It corrodes the metal capsule shell","It dissolves the lactose carrier completely","It increases propellant pressure inside the device"]],
+["What trade-off exists between DPIs and pMDIs regarding excipients and dose size?","DPIs use minimal excipient (lactose) yet can deliver larger doses than pMDIs",["DPIs require more excipients but deliver smaller doses","DPIs need no carrier and always deliver smaller doses","DPIs and pMDIs have identical excipient needs and dose limits"]],
+["A medicated foam is best classified as an emulsion because it has:","A dispersed gas phase within a continuous liquid phase",["Two immiscible liquid phases only","A solid dispersed in gas","A single homogeneous gas phase"]],
+["Surfactants are essential in medicated foam formulations mainly to:","Stabilize dispersion of the gas within the liquid phase",["Dissolve the API completely","Prevent all evaporation of the vehicle","Thicken the liquid phase permanently"]],
+["Whether a foam is stable or quick-breaking is determined chiefly by:","Whether the propellant sits in the internal or external phase",["Whether the API is a solid or liquid","The pH of the aqueous phase","The color additive used"]],
+["An alcohol-based quick-breaking foam is often chosen for antiseptic products because it:","Produces a cooling sensation and may carry disinfectant properties",["Has no drug delivery function","Is always sterile without further processing","Cannot be applied to skin"]],
+["In pressure filling, the valve assembly is inserted and crimped onto the container:","Before the liquefied gas is metered in",["After the liquefied gas is fully added","At the same time the container is capped for shipping","Only after the discharge-rate test"]],
+["Aerosol valve materials must be inert and FDA-approved chiefly because:","They remain in constant contact with the drug formulation, affecting its stability and safety",["They must match the color of the label","They need to withstand incineration","They must conduct electricity for testing"]],
+["Which best describes how orifice size and propellant quantity interact to set the discharge form?","They act together — larger orifice/less propellant favors coarse forms, smaller orifice/more propellant favors fine forms",["Only orifice size matters, propellant amount is irrelevant","Only propellant amount matters, orifice size is irrelevant","Both must always be set to their maximum values"]],
+["The inner dimensions of the dip tube and housing are primarily selected based on:","Product viscosity and intended delivery rate",["Container color and label size","Ambient humidity and altitude","Valve material cost only"]],
+["Packaging a foam-intended product with a small, mist-style actuator orifice would most likely:","Prevent proper foam formation by over-atomizing the product",["Have no effect on the discharge form","Automatically convert the propellant to the internal phase","Increase the sterility of the foam"]],
+["The MDI metering chamber being sealed from the atmosphere while resting is only functional because it is simultaneously:","Open to the container so it can refill",["Open to the atmosphere as well","Sealed from the container too","Connected directly to the dip tube, bypassing the housing"]],
+["Pressure filling is self-limiting (doesn't need manual timing) because:","Flow stops once container and burette pressures equalize",["A mechanical valve counts a fixed number of seconds","The operator watches a fill line","The container is weighed continuously during filling"]],
+["Aerosol containers are tested under various environmental conditions for leaks mainly because:","Real-world storage and shipping expose them to conditions beyond standard room temperature",["Regulatory agencies require exactly one specific temperature test","Environmental testing replaces the need for a discharge-rate test","It verifies the label's color-fastness"]],
+["DPIs being humidity-sensitive is a disadvantage that exists alongside which DPI advantage?","The ability to deliver larger drug doses than pMDIs",["Requiring less patient effort than pMDIs","Being unaffected by ambient conditions","Needing no capsule or preloaded dose"]],
+["Shaking an aerosol before use is primarily important for products where:","The drug is suspended (not fully dissolved) in the propellant",["The formulation is a pure gas with no liquid","The valve needs to be primed mechanically","The label ink needs to set"]],
+["A protective cap over an aerosol valve serves mainly to:","Keep dust and dirt out of the valve mechanism",["Increase internal pressure for a stronger spray","Cool the propellant before use","Indicate the expiration date visually"]],
+["The spacer's 3–5 second timing window addresses a different problem than the MDI's dual-valve mechanism because the spacer:","Gives the patient time to inhale a dose that has already been discharged",["Meters the dose itself instead of the valve","Cools the propellant before discharge","Prevents the valve from resetting"]],
+["Sterility is required for foams applied to open wounds mainly because:","The skin barrier that normally protects against infection is compromised",["Open wounds require a higher drug concentration","Sterile products always foam more stably","Non-sterile foams cannot be quick-breaking"]],
+["Foams may use aqueous or nonaqueous liquids as their continuous phase mainly to:","Accommodate whichever vehicle best suits the API's solubility and stability",["Always increase the foam's density","Guarantee the foam is quick-breaking","Eliminate the need for surfactants"]],
+["A foam intended for prolonged skin contact should be formulated to:","Remain as foam rather than break down quickly",["Break to liquid immediately on contact","Contain no surfactant","Avoid using any propellant at all"]],
+["Positioning the gasket snugly against the stem is functionally important because the stem is:","The moving part through which formulation travels when the valve opens",["The part attached externally to the mounting cup only","Never in contact with the formulation","Used only during filling, not during use"]],
+["DPI capsules are typically made of hard gelatin or hypromellose mainly because these materials:","Can be reliably pierced to release a precise powder dose without reacting with it",["Are the cheapest capsule materials available","Dissolve instantly in the airway","Require refrigeration to remain intact"]],
+["The spring in a valve and the dual-valve mechanism in an MDI share which underlying purpose?","Restoring the system to a defined resting state after each actuation",["Increasing the drug dose with each use","Preventing any refill between doses","Cooling the propellant after discharge"]],
+["Increasing propellant amount through a fixed small orifice tends to produce:","A finer mist due to greater atomizing force",["A coarser solid stream","No change in discharge form","A stable foam"]],
+["The housing's orifice and the stem jointly determine delivery rate and form because:","Formulation must pass sequentially through both before reaching the actuator",["Only the stem contacts the formulation","The housing orifice is purely decorative","They operate on entirely separate flow paths"]],
+["Pressure filling loses less propellant than cold filling mainly because:","Propellant is delivered through an already-crimped, sealed valve stem",["Pressure filling uses no propellant at all","Cold filling requires twice the propellant volume","Pressure filling recycles lost propellant automatically"]],
+["Testing accuracy and reproducibility of dosage is specifically relevant to which type of aerosol product?","Metered-valve products",["All aerosol products equally, metered or not","Only foam products","Only DPI products"]],
+["Label instructions to hold a product at the proper angle and distance exist because:","Both factors jointly determine where and how the product lands on its target",["Angle alone fully determines dosing accuracy","Distance has no effect once angle is correct","These instructions apply only to foam products"]],
+["Moving toward larger orifice, less propellant, and internal-phase propellant shifts a product's discharge toward:","A coarser, more structured form such as a stable foam",["A finer, faster mist","A dry powder cloud","A liquid stream with no foam or spray behavior"]],
+["Manufacturers often prefer pressure filling for most pharmaceutical aerosols, even nonaqueous ones, mainly because:","It offers lower moisture contamination risk and less propellant loss regardless of formulation type",["Cold filling is banned for nonaqueous products","Pressure filling is always faster regardless of scale","Cold filling cannot use any FDA-approved propellant"]],
+["A DPI's delivered dose is more sensitive to patient technique than a pMDI's mainly because:","A DPI dose is liberated and deaggregated by the force of the patient's own inhalation",["A DPI has no metering mechanism at all","A pMDI requires no actuation whatsoever","A DPI's dose depends on ambient temperature, not technique"]],
+["Why is the actuator described as contributing to, but not solely determining, the emitted form of the product?","Because propellant type and quantity also influence particle size and form together with the actuator's design",["Because the mounting cup alone determines the emitted form","Because the dip tube alone determines the emitted form","Because the emitted form is fixed regardless of formulation"]],
+["What does testing spray pattern, in addition to discharge rate, reveal about a metered-dose product?","Whether the geometry/shape of the discharge is consistent, not just the quantity delivered",["The exact chemical purity of the drug","The container's resistance to puncture","The propellant's freezing point"]],
+["Why would a formulator choose hypromellose over gelatin for a DPI capsule in a humid climate?","Hypromellose is comparatively more moisture-resistant than gelatin",["Hypromellose dissolves faster in humidity","Gelatin is impossible to pierce","Hypromellose eliminates the need for a carrier"]],
+["Which pairing correctly matches a filling method with a described advantage?","Pressure filling — less propellant lost in the process",["Cold filling — least moisture contamination","Cold filling — used for most pharmaceutical aerosols","Pressure filling — required for aqueous systems only"]],
+["A quick-breaking foam is most appropriate when the goal is:","Rapid spreading/absorption rather than prolonged surface contact",["Maximum, indefinite foam persistence","Avoiding any contact with skin","Eliminating the need for an API"]]
+];
+
+const quizL3 = [
+["A product needs to shift from a stable foam to a fine mist using only propellant-phase and actuator variables. Which combination of changes would achieve this?","Move propellant to the external phase, use a smaller orifice, and increase propellant quantity",["Move propellant to the internal phase, use a larger orifice, and decrease propellant quantity","Keep propellant phase unchanged, only decrease orifice size","Move propellant to the external phase, use a larger orifice, and decrease propellant quantity"]],
+["In the MDI dual-valve cycle, which pair of states is impossible according to the mechanism described?","The chamber open to both the container and the atmosphere simultaneously",["The chamber sealed from the atmosphere while open to the container","The chamber open to the atmosphere while sealed from the container","The chamber cycling between the two states with each actuation"]],
+["Why is cold filling physically impossible for aqueous formulations, at the level of a specific physical property?","The freezing point of water is far above the -34.5°C to -40°C range needed to liquefy the propellant",["Water reacts chemically with all propellant gases at low temperature","Water increases viscosity too much for metering at any temperature","Water evaporates completely before reaching the required temperature"]],
+["A batch shows correct average discharge rate but poor per-actuation dose reproducibility. What does this indicate about the two test methods?","Discharge rate averages mass over time and can mask actuation-to-actuation variability that dose-reproducibility testing specifically detects",["The discharge rate test is invalid whenever reproducibility fails","Reproducibility testing cannot be performed unless discharge rate fails first","The two tests always produce identical results by design"]],
+["Which statement best explains why pressure filling's reduced propellant loss plausibly also improves fill-weight consistency across units?","Less variable evaporative loss during a sealed, controlled transfer means each unit retains a more consistent final propellant amount",["Pressure filling uses a fixed propellant volume regardless of loss, so consistency is unrelated to loss","Fill-weight consistency depends only on the concentrate, not the propellant","Cold filling and pressure filling always yield identical fill-weight variability"]],
+["Which limitation is most clearly unique to DPIs among the systems described in the text?","Dose liberation and deaggregation depend directly on the force of the patient's own inhalation",["Dependence on correct storage temperature between 15°C and 30°C","Requirement for FDA-approved, inert valve materials","Vulnerability to leaks under environmental testing conditions"]],
+["A patient in severe respiratory distress is prescribed either a DPI or a pMDI with spacer. Which is preferable based on mechanistic reasoning, and why?","pMDI with spacer, because propellant (not patient inhalation force) discharges the dose, and the spacer separately solves timing",["DPI, because breath-actuation guarantees a full dose regardless of inhalation strength","Either is equally appropriate since both rely equally on patient inhalation strength","pMDI without spacer, because it requires no inhalation coordination at all"]],
+["\"DPIs are propellant-free\" and \"DPIs are humidity-sensitive\" are best described as:","Two effects of the same underlying design feature — the absence of a sealed propellant system",["Unrelated, coincidental properties with no shared cause","Contradictory claims, since propellant-free systems should also be humidity-proof","Properties that only apply to capsule-based DPIs, not preloaded ones"]],
+["Which pairing of clinical use and foam type is correctly justified by the phase-location principle?","Rapid-absorption scalp treatment → quick-breaking foam, propellant in external phase",["Rapid-absorption scalp treatment → stable foam, propellant in internal phase","Prolonged-contact wound barrier → quick-breaking foam, propellant in external phase","Prolonged-contact wound barrier → foam with no propellant at all"]],
+["Which of the following is NOT one of the variables described as influencing emitted aerosol form?","The color additive used in the formulation",["The actuator's inner chamber design","The type and quantity of propellant","The actuator's emission orifice size"]],
+["Why does pressure filling minimize both moisture contamination and propellant loss through essentially the same mechanistic feature?","It avoids the extreme, open, cold-temperature transfer conditions that cold filling requires, which are the shared root cause of both problems",["It uses two separate, unrelated mechanisms — a desiccant for moisture and a sealant for propellant","Moisture and propellant loss are unrelated in pressure filling; only cold filling links them","Pressure filling eliminates the need for propellant entirely"]],
+["Why must discharge-rate testing weigh the aerosol before and after a timed period rather than simply timing the spray duration?","Only the weight difference gives an objective measure of mass discharged, which timing alone cannot provide",["Timing alone is more accurate but too difficult to standardize","Weight measurement is required only for foam products","Weighing is used solely to detect leaks, not discharge rate"]],
+["A capsule fails to be pierced in a capsule-based DPI. What is the most direct consequence?","No dose (or an incomplete dose) is delivered, because the patient's inhaled airstream cannot access the sealed capsule contents",["The dose is delivered normally because the device has a backup propellant","The capsule dissolves automatically upon inhalation regardless of piercing","A larger-than-intended dose is released due to pressure buildup"]],
+["Why does the mounting cup's compatibility requirement extend the FDA-material-approval standard to a component not visibly part of the discharge pathway?","Because exposure to the formulation, not visibility during discharge, is the criterion that determines compatibility risk",["Because the mounting cup is the only part in contact with the formulation","Because visible parts are automatically exempt from compatibility testing","Because the mounting cup is replaced more frequently than other parts"]],
+["A metered-dose aerosol delivers less spray on a cold day despite passing all mechanical valve checks. What is the correct interpretation?","The product is being used outside its validated 15–30°C range, which reduces propellant vapor pressure — not a valve malfunction",["The valve has failed and must be replaced","Cold temperatures always void the FDA approval of the device","The discharge reduction indicates a leak in the mounting cup"]],
+["Why is accuracy and reproducibility of dosage tested specifically for metered-valve products but not emphasized the same way for general aerosol sprays?","Metered valves must deliver the same precise dose every actuation, while general sprays are user-controlled by discharge duration",["General sprays are inherently more accurate and need no such testing","Metered valves cannot be tested for spray pattern or particle size","Dosage reproducibility is irrelevant to any aerosol product's clinical use"]],
+["In Fig. 39.3, which opening corresponds to the container-side seal of the dual-valve mechanism?","The opening for emptying (filling) of the metering chamber",["The opening to the actuator seat","The blind end","The turning grip opening"]],
+["What is the functional role of the one-way valve in a spacer/facemask device (Fig. 39.4)?","It allows the held aerosol dose to be drawn out on inhalation while preventing exhaled breath from re-entering the spacer",["It regulates the propellant pressure inside the canister","It pierces the drug capsule before each use","It seals the mouthpiece when not in use to prevent contamination only"]],
+["In the Turbohaler (Fig. 39.7), what is the specific function of the scraper relative to the dosing unit?","It removes excess powder from the dosing unit so only the intended precise metered dose remains",["It pierces a capsule to release the drug","It compresses the powder into a solid pellet","It filters humidity from the storage unit"]],
+["Two identical drug concentrates are processed by cold filling (Product A) and pressure filling (Product B). Which shows greater propellant-content variability across units, and why?","Product A, because cold filling's cold, open transfer process is more prone to variable evaporative propellant loss",["Product B, because pressure filling always overshoots propellant target","Both are equally variable, since propellant loss is unrelated to filling method","Product A, because cold filling always uses more concentrate than propellant"]],
+["Why can spacers benefit any patient's drug deposition pattern, not just those with coordination problems?","The same delay mechanism that solves coordination also gives propellant time to evaporate, reducing droplet size/velocity for anyone using the device",["Spacers add a second propellant charge that benefits all users equally","Spacers filter particles mechanically regardless of timing","The benefit only applies to patients who also use a DPI simultaneously"]],
+["Why is a facemask, rather than a standard mouthpiece, functionally paired with a spacer for pediatric use?","Infants/young children cannot reliably seal around or coordinate breathing through a mouthpiece, so a mask allows dose capture via normal tidal breathing",["A facemask increases the drug dose delivered compared with a mouthpiece","A facemask is required by law for all spacer devices regardless of age","A mouthpiece cannot physically attach to a spacer device"]],
+["Why must aerosol valve materials be inert to \"formulations\" (plural), according to the reasoning in the text?","The same valve design is typically used across multiple different drug products, so materials must be broadly compatible, not validated for just one",["Each valve is custom-manufactured for a single specific formulation only","FDA approval only requires testing against water as a universal formulation","Valve materials never actually contact any formulation during normal use"]],
+["Why would a small compounding facility lacking cryogenic cooling be unable to use cold filling?","Cold filling requires cooling to roughly -34.5°C to -40°C, which needs specialized cryogenic refrigeration equipment",["Cold filling requires no special equipment but is simply illegal for small-scale compounding","Cold filling requires high-pressure burettes not needed by pressure filling","Cold filling can only be performed with aqueous formulations"]],
+["A stable foam formulation is mistakenly manufactured with propellant in the external rather than internal phase. What is the most likely resulting product behavior?","A spray or quick-breaking foam, because external-phase propellant escapes rapidly and disrupts sustained bubble structure",["An unusually more stable foam than intended","No discharge occurs at all","The product becomes a dry powder on discharge"]],
+["Ranking pMDI-alone, pMDI-with-spacer, DPI, and metered-valve accuracy testing from most to least dependent on patient technique, which is correctly ordered?","DPI > pMDI-alone > pMDI-with-spacer > metered-valve accuracy testing",["Metered-valve accuracy testing > DPI > pMDI-alone > pMDI-with-spacer","pMDI-with-spacer > pMDI-alone > DPI > metered-valve accuracy testing","All four are equally dependent on patient technique"]],
+["Why are discharge rate and particle size distribution tested as separate, independent parameters?","Discharge rate measures bulk mass emitted per time, while particle size distribution measures how that mass is divided among droplet sizes",["They are actually the same measurement reported in different units","Particle size distribution can only be measured after discharge rate fails","Discharge rate is only relevant to DPIs, not pMDIs"]],
+["Are \"the housing orifice/stem set delivery rate\" and \"dip tube/housing dimensions are set by viscosity and delivery rate\" circular statements?","No — one describes a design target derived from the product, the other describes the mechanism engineered to achieve that target",["Yes — both describe the exact same single design step with no distinction","No — they describe entirely unrelated valve parts with no shared variable","Yes — delivery rate is fixed by regulation, so neither statement has any practical design implication"]],
+["Converting a fine-mist nasal spray formulation into a foam-based topical product using the same concentrate requires which combination of changes?","Shift propellant to the internal phase, add surfactants, use a larger orifice with less propellant",["Shift propellant to the external phase, remove surfactants, use a smaller orifice with more propellant","Keep the propellant phase unchanged, only reduce orifice size","Replace propellant entirely with compressed air"]],
+["Why can a DPI and a pMDI-with-spacer both be considered valid solutions to the same coordination problem despite opposite strategies?","One eliminates the timing requirement (breath-actuation), the other widens the timing window — both fully address the mistiming failure mode",["Only the DPI actually solves the coordination problem; the spacer does not address it at all","Both devices use identical breath-actuation mechanisms internally","The coordination problem only applies to DPIs, not pMDIs"]],
+["A batch of pressurized MDIs fails leak testing at low temperature but passes at room temperature. What is the most likely explanation?","Lower temperature reduces internal propellant pressure, potentially revealing marginal seal/crimp integrity issues masked at normal operating pressure",["Low temperature always causes false-positive leak results with no real defect present","Leak testing is only valid at temperatures above 30°C","The valve gasket dissolves at low temperature, causing an artificial leak signal"]],
+["Is the mounting cup functionally more similar to the container or to the other mechanical valve parts?","More similar to the container, since its underside must meet the same formulation-compatibility criteria, potentially including the same protective coatings",["More similar to the spring, since both return to a resting position after actuation","Equally similar to both, with no meaningful distinction described in the text","More similar to the actuator, since both are pressed by the user during discharge"]],
+["Why does an alcohol-based quick-breaking foam produce a cooling sensation while a stable, non-alcohol foam typically does not?","The cooling effect depends on formulation-specific factors — alcohol content and rapid phase collapse — neither present in a stable, non-alcohol foam",["All foams inherently produce the same cooling sensation regardless of formulation","Cooling sensation depends only on the API, never on alcohol or foam-breaking speed","Stable foams are chemically incapable of containing alcohol"]],
+["Which single variable is described as most central to explaining discharge form, filling method choice, spacer benefit, DPI trade-offs, and foam type simultaneously?","The propellant's quantity, phase location, and physical state",["The color and shape of the actuator button","The brand of the FDA-approved plastic used in valves","The container's label design"]],
+["Why is \"less than the usual spray\" from a cold canister not considered evidence of a defective valve?","It reflects use outside the validated 15–30°C storage/use range, which lowers propellant vapor pressure, not a mechanical failure",["It always indicates the propellant has fully leaked out","It is evidence the gasket material was not FDA-approved","Cold temperature has no actual effect on spray output, so the observation is anomalous"]],
+["What does testing spray pattern specifically add beyond what discharge rate and particle size distribution already reveal?","The consistency of the geometric shape/coverage of the discharge, distinct from total mass emitted or droplet size",["Nothing — spray pattern is mathematically derivable from discharge rate alone","It measures only the chemical identity of the API","It is only relevant for testing DPI capsules"]],
+["Why would hypromellose be preferred over hard gelatin for a DPI capsule intended for a humid climate?","Hypromellose is comparatively more resistant to moisture than gelatin, protecting the enclosed dry powder dose",["Hypromellose dissolves faster in humid air, releasing the dose sooner","Gelatin capsules cannot be pierced by any DPI device","Hypromellose eliminates the need for a lactose carrier"]],
+["What is the best justification for why FDA approval standards apply uniformly across all seven listed valve parts rather than only the parts touched during discharge?","Every part is exposed to or interacts with the formulation or its pathway at some stage, making formulation-contact the relevant compatibility criterion",["Regulatory convenience alone, with no technical justification described in the text","Only the actuator and stem require FDA approval; the rest are exempt","FDA approval applies only to metal parts, not plastic or rubber ones"]],
+["Which best captures why \"propellant-free\" and \"humidity-sensitive\" are not contradictory facts about DPIs?","The absence of a sealed propellant barrier is the very design feature that both removes the propellant and exposes the powder to ambient humidity",["They are contradictory, and one of the two facts must be incorrect","Humidity sensitivity applies only to preloaded DPIs, and propellant-free applies only to capsule DPIs","Propellant-free formulations are always housed in fully sealed, humidity-proof capsules"]],
+["Which statement correctly integrates the relationship between orifice size and propellant quantity as design variables for controlling discharge form?","They must be matched together — increasing propellant quantity while keeping a large orifice intended for foam can push the discharge toward a finer spray, counteracting the orifice's intended effect",["Orifice size alone fully determines discharge form regardless of propellant quantity","Propellant quantity has no measurable effect on discharge form once the orifice is fixed","The two variables can never interact; they control entirely separate aspects of the product"]]
+];
+
+const quizSets = {1: quizL1, 2: quizL2, 3: quizL3};
+let currentQuizLevel = 1;
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+let answered = 0, correctCount = 0;
+
+function renderQuiz(){
+  answered = 0; correctCount = 0;
+  const bank = quizSets[currentQuizLevel];
+  const list = document.getElementById('quiz-list');
+  list.innerHTML = '';
+  bank.forEach((item,idx)=>{
+    const [q,correct,wrongs] = item;
+    const options = shuffle([correct,...wrongs]);
+    const box = document.createElement('div');
+    box.className='q-item';
+    box.innerHTML = '<h4><span class="qn">Q'+(idx+1)+'</span>'+q+'</h4>';
+    options.forEach(opt=>{
+      const b = document.createElement('button');
+      b.className='opt';
+      b.textContent = opt;
+      b.addEventListener('click',()=>{
+        const allOpts = box.querySelectorAll('.opt');
+        allOpts.forEach(o=>o.disabled=true);
+        if(opt===correct){
+          b.classList.add('correct');
+          correctCount++;
+        } else {
+          b.classList.add('wrong');
+          allOpts.forEach(o=>{ if(o.textContent===correct) o.classList.add('correct'); });
+        }
+        answered++;
+        updateScore();
+      });
+      box.appendChild(b);
+    });
+    list.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore(){
+  const bank = quizSets[currentQuizLevel];
+  document.getElementById('quiz-score-text').textContent = 'Score: '+correctCount+' / '+answered+'  (out of '+bank.length+' questions)';
+}
+
+document.querySelectorAll('#quiz-level-nav .level-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('#quiz-level-nav .level-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentQuizLevel = parseInt(btn.dataset.difficulty,10);
+    renderQuiz();
+  });
+});
+
+document.getElementById('quiz-reset').addEventListener('click', renderQuiz);
+
+renderQuiz();
+</script>
+</body>
+</html>
